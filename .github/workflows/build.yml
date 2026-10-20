@@ -1,0 +1,20 @@
+name: Build C++ EXE
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Compile C++
+        run: |
+          cl.exe /EHsc /O2 main.cpp /link /SUBSYSTEM:WINDOWS /OUT:locker.exe bcrypt.lib winmm.lib user32.lib
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cpp-locker
+          path: locker.exe
